@@ -1,8 +1,9 @@
-namespace ToDoList.App.DTO {
+namespace ToDoList.DTO {
     public class TodoTask {
-        public string? Text { get; init; }
-        public bool Completed { get; set; } = false;
-        public override string ToString() => Text ?? string.Empty; // la flecheta diu que es un mètode que retorna aixo.
+        public int Id { get; set; }
+        public string? Name { get; init; }
+        public bool IsComplete { get; set; } = false;
+        public override string ToString() => Name ?? string.Empty; // la flecheta diu que es un mètode que retorna aixo.
 
         /*public override string ToString() {
             return Text == null ? string.Empty : Text; // aquí, si es null, fica string buit, sino el text rebut

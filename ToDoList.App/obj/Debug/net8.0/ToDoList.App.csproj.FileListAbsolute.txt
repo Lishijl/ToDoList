@@ -2060,3 +2060,13 @@ C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\ToDoList.App.dl
 C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\refint\ToDoList.App.dll
 C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\ToDoList.App.pdb
 C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\ref\ToDoList.App.dll
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\ToDoList.App.sourcelink.json
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\bin\Debug\net8.0\wwwroot\_framework\ToDoList.DTO.pdb
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\bin\Debug\net8.0\wwwroot\_framework\ToDoList.DTO.wasm
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\bin\Debug\net8.0\wwwroot\_framework\ToDoList.DTO.wasm.gz
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\bin\Debug\net8.0\wwwroot\_framework\ToDoList.DTO.pdb.gz
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\bin\Debug\net8.0\ToDoList.DTO.dll
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\bin\Debug\net8.0\ToDoList.DTO.pdb
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\webcil\ToDoList.DTO.wasm
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\compressed\17n8zs0k6l.gz
+C:\Users\li.ji.ext\dual24\ToDoList\ToDoList.App\obj\Debug\net8.0\compressed\sitkz65z50.gz

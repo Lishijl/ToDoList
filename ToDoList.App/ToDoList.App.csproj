@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.6" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- hem afegit una referència amb el add amb la comanda dotnet? 
+  afegit amb la comanda dotnet add reference ..\ToDoList.DTO\ToDoList.DTO.csproj -->
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoList.DTO\ToDoList.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,12 +1,14 @@
 @page "/todo"
 
 @* @using global::ToDoList.App *@
-@using global::ToDoList.App.DTO
+@using global::ToDoList.App 
+@using global::ToDoList.DTO
 @* es un global, es pensaba que es un namespace, pero no es anidat dins, el using, perque es de fora *@
 @* proveeix una insta a una classe, de LocalStorageAccessor
-comentaris amagats:  @* comentari que no es pinta
-@using global::ToDoList.App *@
+comentaris amagats:  @* comentari que no es pinta *@
 @inject LocalStorageAccessor LocalStorageAccessor
+@inject HttpClient Http
+@* s'injecta HttpClient, per fer la comunicació amb la API *@
 
 <PageTitle>Todo</PageTitle>
 
@@ -14,11 +16,11 @@ comentaris amagats:  @* comentari que no es pinta
 
 @foreach(TodoTask item in tasks) {
     // al onchange executem funcio de guardar valor a onchange, en el onclic, i el bind, sera value = @item...
-    <p><input type="checkbox" @bind="item.Completed" @onclick="SaveAsync"/> @item</p>
+    <p><input type="checkbox" @bind="item.IsComplete" @onclick= " () => SaveAsync(item) "/> @item  <button @onclick=" () => DeleteTask(item)"><i class="bi bi-x-square"></i></button></p>
 }
 @*onchange directiva que guarda els canvis, metode SaveAsync*@
 
-<input type="text" @bind="TaskText"/> @*prmer es lentrada per input, i fem que senllaci amb el bind a TaskText*@ 
+<input type="text" @bind="TaskText" /> @*prmer es lentrada per input, i fem que senllaci amb el bind a TaskText*@ 
 <button class="btn btn-primary" @onclick="AddTaskAsync">Add</button> @* boto nou, hem tret els increments i counters *@
 @* printegem el que volem que es vegi, la tasca en la que s'ha guardat per setters *@
 @*<p>@TaskText</p> ho treiem, era un xivato *@
@@ -26,33 +28,60 @@ comentaris amagats:  @* comentari que no es pinta
 @code {
     // PUJAR AL REPOSITORI AMB LENLLAÇ HTTP NORMAL
     private List<TodoTask> tasks = new(); // new() novallista inicialitzada
-    private string? TaskText {get; set; } // creem mètodes accessors, i amés definim que POT SER NULL
+    private string? TaskText { get; set; } // creem mètodes accessors, i amés definim que POT SER NULL
     // string pot sr null. camp text, una cosa que pot ser nulla hem d'indicar, camps per a la llista. <nullable>enable/desable</Nullable> en ToDoList.App.csproj(dins del projecte)     /* si no indiquem que es nullable pot petar */
     // afegim a la llista, les tasques, passant l'argument per TaskText, i cada cop, que s'afegeixi, passa a ser blanc
     
     // mètode ue añadeix una tasca i la deixa en blanc per cada tasca afegida, PER CONVENCIÓ ANOMENEM ASYNC al final
     // pasem del void a Async Task
 
-    // sececuta sol despres del renderitzat
+    // seXecuta sol despres del renderitzat, GET, inicialitza l'Async 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
+        //***** CAL FER UN CANVI AQUI, COMPROVA LA VERSIÓ DEL GIT
         if(firstRender) {
-            /*tasks = */ var storageTasks = await LocalStorageAccessor.GetValueAsync<List<TodoTask>>("todos");
-            foreach(TodoTask t in storageTasks) tasks.Add(t);
+            // 7014 -> 5282
+            tasks = await Http.GetFromJsonAsync<List<TodoTask>>("https://localhost:5217/api/TodoItems");
+            /*tasks =  var storageTasks = await LocalStorageAccessor.GetValueAsync<List<TodoTask>>("todos");
+            foreach(TodoTask t in storageTasks) tasks.Add(t); */
             /* indica canvis realitzats a la llista, i per això apareix la llista directament després del renderitzat, pinta un altre vegada, com un rerenderitzat */
             StateHasChanged();
         }
     }
-
-    private async Task SaveAsync() {
-        /* lo del Delay1, es antipattern, lo recomenat es descomposa, guardes, @bind descomponses, onchenge i un value, i despres un mostrat*/
+    
+    /*private async Task SaveAsync() {
+        /* lo del Delay1, es antipattern, lo recomenat es descomposa, guardes, @bind descomponses, onchenge i un value, i despres un mostrat
         await Task.Delay(1);
         await LocalStorageAccessor.SetValueAsync<List<TodoTask>>("todos", tasks);
     }
 
     private async Task AddTaskAsync() {
-        tasks.Add(new TodoTask { Text = TaskText });
+        tasks.Add(new TodoTask { Name = TaskText });
         // guardem llista, tipus todoTask, on els parametres, son todos, i les tasques, i li fem await, en espera de
         await LocalStorageAccessor.SetValueAsync<List<TodoTask>>("todos", tasks);
         TaskText = "";
+    } */
+
+    // PUT 5282/7014
+    private async Task SaveAsync(TodoTask item) {
+        await Task.Delay(1);
+        // afegim "CancellationToken.None"
+        await Http.PutAsJsonAsync($"https://localhost:5217/api/TodoItems/{item.Id}", item);
+        // , CancellationToken.None
     }
+
+    // POST
+    private async Task AddTaskAsync() {
+        var item = new TodoTask { Name = TaskText };
+        tasks.Add(item);
+        TaskText = "";
+        await Http.PostAsJsonAsync("https://localhost:5217/api/TodoItems", item);
+    }
+
+    // DELETE
+    private async Task DeleteTask(TodoTask item) {
+        tasks.Remove(item);
+        await Http.DeleteAsync($"https://localhost:5217/api/TodoItems/{item.Id}");
+    }
+
+    // tornar a canviar 5282 a 5217
 }
