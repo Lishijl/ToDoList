@@ -175,13 +175,14 @@ namespace TodoApi.Controllers
             // ara ens interessa usar una nova instància de tipus todoItem
             // en que la variable contindrà els mateixos camps, que del 
             // tipus TodoItemDTO, pel siEsCompletat i pel Nom.
-            /*var todoItem = new TodoItem
+            var todoItem = new TodoItem
             {
                 IsComplete = todoDTO.IsComplete,
                 Name = todoDTO.Name
-            };*/
+            };
             
-            var todoItem = _mapper.Map<TodoItem>(todoDTO);
+            //  implementació d'Oscar, var todoItem = _mapper.Map<TodoItem>(todoDTO);
+            
             // mètode POST indicat amb l'atribut [HttpPost] que obté pel paràmetre el valor de TodoItem de la solicitud HTTP
             // PostTodoItem -> crea Location header's URI. nameof keyword, usat per hard-coding action name a CreatedAtAction
             _context.TodoItems.Add(todoItem);
@@ -193,7 +194,8 @@ namespace TodoApi.Controllers
                 /*"GetTodoItem", 
                 new { id = todoItem.Id },
                 todoItem*/
-                nameof(PostTodoItem), 
+                // nameof(PostTodoItem) -> nameof(GetTodoItem)
+                nameof(GetTodoItem), 
                 new { id = todoItem.Id }, 
                 ItemToDTO(todoItem));
             // (nameof) evita codificar nom d'acció en la crida de CREATE AT ACTION
