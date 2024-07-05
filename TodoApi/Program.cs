@@ -3,6 +3,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 using ToDoList.DTO;
+// hi haura 2 usings mes
+// *Falta aquest: using IdentificationModel
+using Microsoft.AspNetCore.Authentication.JwtBearer
 // afegeix directius de les classe Models i packet/nuget EntityFrameworkCore
 // injeccio de dependencies
 
@@ -25,11 +28,32 @@ builder.Services.AddControllers();
 /**/
 builder.Services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// es MODIFICA el swagger
+builder.Services.AddSwaggerGen(c =>
+    {
+        option.AddSecurityDefinition("Bearer", new OpenApiSecurity)
+    }
+);
 // hem fet una funcio lambda per dir de com mapejar. desde el todotask, cap a todoitem, i a la inversa. i no cal fer res mes perque el nom dels camps coincideixen
 builder.Services.AddAutoMapper(cfg => {
     cfg.CreateMap<TodoTask, TodoItem>().ReverseMap();
 });
+
+// instalar un paquet, farem servir jwt, es MODIFICA
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer((options => {
+
+    validateIssuerSign
+    ValidIssuer = builderConfiguration(Jwt:Visual)
+    ValidAudience = builder.builderConfiguration
+    IssuerSigningKey = new SymmetricSecurityKey(
+        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+})));
+// validem per a qui el token
+// validem el temps de vida
+// abans de lhora actual i que caduqui despres de la hora actua
+// validem clau de firma
+
 // hem creat una configuracio de mapeig de todotask a todoitem, i també a la inversa, i com que els
 // noms dels camps concideixen, no tenim que fer res més, si no coincidis, dins del createmat( creariem un metode on ficariem de com mapegem d'un cap a laltre completed -> iscompleted o a la inversa)
 // per exemple ().ForMember(dest => dest.Name, opt => opt.MapFrom), del desti, destiname, per aquest membre agafa del origen -> opt
@@ -49,6 +73,8 @@ app.UseHttpsRedirection();
 // usa Cors, pero habilita per tot allowed-origin
 app.UseCors();
 
+// usa autentication en la app
+app.UseAuthentication();
 app.UseAuthorization();
 
 /**/
